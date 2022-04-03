@@ -1,0 +1,12 @@
+.i_responsive{
+    width: 3rem;
+}
+.s_responsive{
+    width: 8rem;
+}
+.composiciones{
+    grid-template-columns: repeat(4,2fr);
+}
+.cont_comp{
+    grid-template-columns: 1fr,3fr;
+}

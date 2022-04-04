@@ -119,6 +119,12 @@ class Registro
         }else
             return 0;
     }
+    public function Registrar_Lab($idficha,$idcombinacion,$idvariante,$porc1,$compo1,$porc2,$compo2){
+        $query=new sentencias();
+        $db = $query->Iniciar_transaccion($query);
+
+        $sql="";
+    }
     public function Actualizar_Combinacion($id, $comb){//$id, $comp
         $query = new Sentencias();
         $db = $query->Iniciar_Transaccion($query);

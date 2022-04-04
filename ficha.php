@@ -849,32 +849,21 @@ $query = new Registro();
                         <div class="col-md-12">
                             <div id="dv_tbl_lab1" class="table-responsive">
                                 <table  id="tbl_lab1" class="table table-bordered table-hover" style="display: block; font-size: 15px">
-                                    <thead><tr><th rowspan="2">COMPOSICION(ES)</th><th colspan="5">VARIANTES</th></tr><tr><th>1</th><th>2</th><th>3</th><th>4</th></tr></thead>
+                                    <!-- <thead><tr><th rowspan="2">COMPOSICION(ES)</th><th colspan="5">VARIANTES</th></tr><tr><th>1</th><th>2</th><th>3</th><th>4</th></tr></thead> -->
                                 </table>
                             </div>
                             <div id="dv_tbl_lab" class="table-responsive">
                                 <table  id="tbl_lab" class="table table-bordered table-hover " style="display: block; font-size: 15px">
-                                    <thead><tr><th rowspan="2">COMPOSICION(ES)</th><th colspan="5">VARIANTES</th></tr><tr><th>1</th><th>2</th><th>3</th><th>4</th></tr></thead>
+                                    <!-- <thead><tr><th rowspan="2">COMPOSICION(ES)</th><th colspan="5">VARIANTES</th></tr><tr><th>1</th><th>2</th><th>3</th><th>4</th></tr></thead> -->
                                     
-                                    <th rowspan="5">Base</th>
-                                    <tr>
-                                        <th class="cont_comp"><label><input class="i_responsive" type="number">. % .</label><select class="s_responsive" name="0" id="0">Composición</select></th>
-                                        <th class="cont_comp"><label><input class="i_responsive" type="number">. % .</label>
-                                            <select class="s_responsive" name="0" id="0">Composición</select>
-                                        </th>
-                                        <th class="cont_comp"><label><input class="i_responsive" type="number">. % .</label>
-                                            <select class="s_responsive" name="0" id="0">Composición</select>
-                                        </th>
-                                        <th class="cont_comp"><label><input class="i_responsive" type="number">. % .</label>
-                                            <select class="s_responsive" name="0" id="0">Composición</select>
-                                        </th>
-                                    </tr>
+                                    <!-- <th rowspan="5">Base</th> -->
+                                    
                                     
                                 </table>
                             </div>
                             <div class="row">
                             <div class="col-md-5"></div>
-                            <div class="col-md-2"></div><button type="button" class="btn btn-primary" id="btn_indicaciones" onclick="Registrar_Laboratorio();">Guardar</button></div>
+                            <div class="col-md-2"></div><button type="button" class="btn btn-primary" id="btn_indicaciones" onclick="Registrar_CombinacionN();">Guardar</button></div>
                             <div class="col-md-5"></div>
                             </div>
                         </div>
@@ -885,6 +874,7 @@ $query = new Registro();
             <div class="container"><?php include_once('modal_pdf.php')?></div>
             <div class="container"><?php include_once('modal_variante.php')?></div>
             <div class="container"><?php include_once('modal_med.php')?></div>
+            <div class="container"><?php include_once('modal_lab.php')?></div>
         </div>
     </div>
 </section>
@@ -1200,6 +1190,76 @@ $query = new Registro();
         }
     }
 
+    function Registrar_Laboratorio(){
+        $('#btn_regN').blur();
+        
+        if($('#tporcentajen1').val()==''){
+            $('#cmbtipon').focus();
+            alert("Error1")
+            return;
+        }
+        if($('#tporcentajen2').val()==''){
+            $('#cmbvarianten').focus();
+            alert("Error2")
+            return;
+        }
+        if($('#cmbcomposicionn1').val()==''){
+            $('#tcolorn').focus();
+            alert("Error3")
+            return;
+        }
+        if($('#cmbcomposicionn2').val()==''){
+            $('#tcolorn').focus();
+            alert("Error4")
+            return;
+        }
+        /*Modificar el ingreso de las telas, llevarse unicamente el icod y ya no la descripcion
+        * al seleccionar la tela la descripcion se debera cargar en un input text y se tomara el valor de este input para ingresarlo en la BD
+        * */
+        if($('#tporcentajen1').val()!='' || $('#cmbcomposicionn1').val()!=''){
+            //var tela1 = $('#cmbtelan1 option:selected').text();//llevar el valor del input nuevo concatenando '_'
+            var composicion1 = $('#tporcentajen1').val()+'|'+$('#cmbcomposicionn1').val();
+            alert (composicion1)
+        }
+        if($('#tporcentajen2').val()!='' || $('#cmbcomposicion2').val()!=''){
+            var composicion2 = $('#tporcentajen2').val()+'|'+$('#cmbcomposicionn2').val();
+            alert (composicion2)
+        }
+
+        var param = 'ficha='+$('#id_ficha').val()+'&comb='+$('#tipo_var').val()+'&id_variante='+$('#id_variante').val()+'&composicion='+composicion1+'|'+composicion2+'&accion=Agregar_lab';;
+        alert (param)
+        // if($('#id_variante').val()!='')
+        //     param += '&idvar='+$('#id_variante').val()+'&accion=Modificar_CombN';
+        // else
+        //     param += '&accion=Ingresar_CombN';
+
+        if($('#id_ficha').val()!=''){
+            $.ajax({
+                url: 'Transacciones.php',
+                cache:false,
+                type: 'POST',
+                data:param,
+                success: function(data){
+                    if(data > 0){
+                        $('#modal_variante').modal('hide');
+                        Limpiar_Modal();
+                        Buscar_CombinacionesN($('#id_ficha').val());
+                        Buscar_Habil($('#id_ficha').val());
+                        Buscar_Composicion($('#id_ficha').val());
+                        Buscar_TipoP($('#id_ficha').val());
+                    }else{
+                        // swal({title: "Error.!!", icon: "success", timer: 1300, showConfirmButton: false});
+                    }
+                },
+                error: function (request, status, error) {alert(request.responseText);}
+            });
+        }else{
+            swal({title: "Orden sin registrar.!!", icon: "success", timer: 1300, showConfirmButton: false});
+            $('#tbuscar').focus();
+            return;
+        }
+    }
+
     function Buscar_CombinacionesN(nm){
         var param = 'ficha='+nm+'&tp=Consultar_Comb';
 
@@ -1334,6 +1394,27 @@ $query = new Registro();
         $("#modal_variante").modal({backdrop: 'static', keyboard: false, show: true});
     }
 
+    function Modal_Lab(comb,vari) {
+        $('#btn_modal_lab').blur();
+        // alert (nm)
+        alert( comb);
+        alert(vari)
+        $('#tipo_var').val(comb);
+        $('#cmbtipon').val(vari);
+        // $('#cmbvarianten').val(cont+1);
+        /*if(cont > 0){
+            $('#cmbvarianten').find('option').remove().end().append('<option value="0"></option>').val('0');
+            for(var i=cont+1; i<=10; i++){
+                $('#cmbvarianten').append('<option value="'+i+'">'+i+'</option>');
+            }
+        }*/
+        var param = 'id='+$('#id_ficha').val();
+        var param = 'id_variante='+vari;
+        var param = 'id_comb='+comb;
+        $(".modal-title").html("Agregar Composición");
+        $("#modal_lab").modal({backdrop: 'static', keyboard: false, show: true});
+    }
+
     function Cargar_ProveedorN(nm,a,b,prv,ft){
         var param = 'icod='+$('#cmbtelan'+nm).val()+'&nm='+nm+'&a='+a+'&b='+b+'&prv='+prv+'&tp=Buscar_Prv';
         $.ajax({
@@ -1395,6 +1476,11 @@ $query = new Registro();
         }
         $('.modal-title').html('Editar variante');$('#modal_variante').modal({backdrop: 'static', keyboard: false, show: true});
     }
+    function Variante_Lab(id) {
+        
+        $('.modal-title').html('Editar variante');$('#modal_variante').modal({backdrop: 'static', keyboard: false, show: true});
+    }
+    
 
     function Eliminar_Variante(id,vte, comb) {
         $('#'+id).blur();
@@ -1771,54 +1857,54 @@ $query = new Registro();
 
     }
 
-    function Registrar_Laboratorio(){
-        $('#btn_comb').blur();
+    // function Registrar_Laboratorio(){
+    //     $('#btn_comb').blur();
 
-        if($('#id_ficha').val()!=''){
-            var param = 'str='+$('#tcombinaciones').val();
-            param += '&id='+$('#id_ficha').val();
-            param += '&accion=Ingresar_Combinacion';
+    //     if($('#id_ficha').val()!=''){
+    //         var param = 'str='+$('#tcombinaciones').val();
+    //         param += '&id='+$('#id_ficha').val();
+    //         param += '&accion=Ingresar_Combinacion';
 
-            $.ajax({
-                url: 'Transacciones.php',
-                cache:false,
-                type: 'POST',
-                data:param,
-                success: function(data){
-                    if(data > 0){
-                        swal({title: "Cambios guardados.!!", icon: "success", timer: 1300, showConfirmButton: false});
-                        Buscar_Combinaciones($('#id_ficha').val());
-                        Buscar_Habil($('#id_ficha').val());
-                        Buscar_Composicion($('#id_ficha').val());
-                        Buscar_TipoP($('#id_ficha').val());
-                        $('#cmbtipo').val('0');
-                        $('#cmbtipo').trigger('change');
-                        for(var j=1; j<=5; j++){
-                            $('#tcolor'+j).val('');
-                            $('#cmbtela'+j).select2('destroy');
-                            $('#cmbtela'+j).val('0').select2();
-                        }
-                        for(var i=1; i<=10; i++){
-                            $('#cmbproveedor'+i).select2('destroy');
-                            $('#cmbproveedor'+i).val('0');
-                            $('#cmbfactura'+i).select2('destroy');
-                            $('#cmbfactura'+i).val('0');
-                        }
-                        $('#tcombinaciones').val('');
-                    }else if (data == 'Error_Comp'){
-                        swal({title: "Sin composicion en Proscai.!!", icon: "success", timer: 1300, showConfirmButton: false});
-                    }else{
-                        swal({title: "Error.!!", icon: "success", timer: 1300, showConfirmButton: false});
-                    }
-                },
-                error: function (request, status, error) {alert(request.responseText);}
-            });
-        }else{
-            swal({title: "Orden sin registrar.!!", icon: "success", timer: 1300, showConfirmButton: false});
-            $('#tbuscar').focus();
-            return;
-        }
-    }
+    //         $.ajax({
+    //             url: 'Transacciones.php',
+    //             cache:false,
+    //             type: 'POST',
+    //             data:param,
+    //             success: function(data){
+    //                 if(data > 0){
+    //                     swal({title: "Cambios guardados.!!", icon: "success", timer: 1300, showConfirmButton: false});
+    //                     Buscar_Combinaciones($('#id_ficha').val());
+    //                     Buscar_Habil($('#id_ficha').val());
+    //                     Buscar_Composicion($('#id_ficha').val());
+    //                     Buscar_TipoP($('#id_ficha').val());
+    //                     $('#cmbtipo').val('0');
+    //                     $('#cmbtipo').trigger('change');
+    //                     for(var j=1; j<=5; j++){
+    //                         $('#tcolor'+j).val('');
+    //                         $('#cmbtela'+j).select2('destroy');
+    //                         $('#cmbtela'+j).val('0').select2();
+    //                     }
+    //                     for(var i=1; i<=10; i++){
+    //                         $('#cmbproveedor'+i).select2('destroy');
+    //                         $('#cmbproveedor'+i).val('0');
+    //                         $('#cmbfactura'+i).select2('destroy');
+    //                         $('#cmbfactura'+i).val('0');
+    //                     }
+    //                     $('#tcombinaciones').val('');
+    //                 }else if (data == 'Error_Comp'){
+    //                     swal({title: "Sin composicion en Proscai.!!", icon: "success", timer: 1300, showConfirmButton: false});
+    //                 }else{
+    //                     swal({title: "Error.!!", icon: "success", timer: 1300, showConfirmButton: false});
+    //                 }
+    //             },
+    //             error: function (request, status, error) {alert(request.responseText);}
+    //         });
+    //     }else{
+    //         swal({title: "Orden sin registrar.!!", icon: "success", timer: 1300, showConfirmButton: false});
+    //         $('#tbuscar').focus();
+    //         return;
+    //     }
+    // }
 
     function Registrar_Modelo(){
         $('#btn_model').blur();

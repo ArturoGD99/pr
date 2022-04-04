@@ -380,52 +380,6 @@ if($tp == 'cte'){
         $tbl .= "</tbody></table>";
         echo $tbl;
     }else echo 0;
-}else if($tp == 'laboratorio1'){//busca el contenido de la tabla de laboratorio
-    $ficha = $_POST['ficha'];
-    $tbl = "";
-    $rm = $query->Consultar("CB.ID_COMBINACION, CB.ID_CAT_COMBINACION, CT.CORTA,CB.COMPOSICION","FCOMBINACIONES CB LEFT JOIN FCAT_COMBINACION CT ON CT.ID_CAT_COMBINACION = CB.ID_CAT_COMBINACION","CB.ID_FICHA =".$ficha." AND CB.ID_CAT_COMBINACION NOT IN (8,11,12,13)","CB.ID_COMBINACION DESC");
-    if($rm->RecordCount()>0){
-        $cont=$rm->fields['NUM'];
-        $comb = $rm->fields['ID_COMBINACION'];
-
-        $rj=$query->Consultar("*","fvariantes","ID_COMBINACION=".$comb."","");
-        $tbl .= "<div class='table-responsive'><table  id='mytable' class='table table-bordered table-hover' style='display: block; font-size: 13px'><thead>";
-        $tbl .= "<tr><th>TIPO</th>";
-        $i=1;
-        while(!$rj->EOF){
-            $tbl .= "<th>V".$rj->fields['VARIANTE']." ".$rj->fields['COLOR']."</th>";
-            $i=$i+1;
-            $rj->MoveNext();
-        }
-        $tbl .="</tr></thead><tbody>";
-        while(!$rm->EOF){
-            $tipo = $rm->fields['ID_CAT_COMBINACION'];
-            $comb = $rm->fields['ID_COMBINACION'];
-            $elastico="65% POLIESTER 35% ELASTODIENO";
-            $tbl .= "<tr id='row".$comb."'><td>".$rm->fields['CORTA']."</td>";//<td>".$descr."</td>
-            $rv = $query->Consultar("*","FVARIANTES","ID_COMBINACION =".$comb,"");
-            $ra=$query->Consultar("*","FCOMBINACIONES","ID_CAT_COMBINACION=".$tipo."","");
-            if($rv->RecordCount()>0){
-                $tela = "";
-                while(!$rv->EOF){
-                    // $tela = $rv->fields['COLOR']."_".$rv->fields['ICOD']."_".$rv->fields['IDESCR']."_".$rv->fields['PRV_FACT']."|";
-                    // if($rv->fields['ICOD2'] != '')
-                    //     $tela .= $rv->fields['ICOD2']."_".$rv->fields['IDESCR2']."@".$rv->fields['PRV_FACT2'];
-                    $tbl .= "<td>".$rv->fields['COLOR']."_".$rv->fields['ICOD']."_".$rv->fields['IDESCR']."@".$rv->fields['COLOR']."@".$rv->fields['PRV_FACT']."</td>";
-                    // if($ra->RecordCount()>0){
-                    //     $tbl .= "<td>".$elastico."</td>";
-                    // }
-                    $rv->MoveNext();
-                }
-                // for($i=$rv->RecordCount(); $i<9; $i++){
-                //     $tbl .= "<td></td>";
-                // }
-            }
-            $rm->MoveNext();
-        }
-        $tbl .= "</tbody></table></div>";
-        echo $tbl;
-    }else echo 0;
 }else if($tp == 'laboratorio'){//busca el contenido de la tabla de laboratorio
     // $ficha = $_POST['ficha'];
     // $tblcomp="";
@@ -469,7 +423,7 @@ if($tp == 'cte'){
 
         $rj=$query->Consultar("*","fvariantes","ID_COMBINACION=".$comb."","");
         $tbl .= "<div class='table-responsive'><table  id='mytable' class='table table-bordered table-hover' style='display: block; font-size: 13px'><thead>";
-        $tbl .= "<tr><th>TIPO</th>";
+        $tbl .= "<tr><th></th><th colspan='8'>Variantes</th></tr><tr><th>Tipo</th>";
         $i=1;
         while(!$rj->EOF){
             $tbl .= "<th>V".$rj->fields['VARIANTE']." ".$rj->fields['COLOR']."</th>";
@@ -486,43 +440,76 @@ if($tp == 'cte'){
             if($rv->RecordCount()>0){
                 $tela = "";
                 while(!$rv->EOF){
+                    $vari=$rv->fields['ID_VARIANTE'];
+                    // $tbl.="<h3>".$vari."</h3>";
                     // $tela = $rv->fields['COLOR']."_".$rv->fields['ICOD']."_".$rv->fields['IDESCR']."_".$rv->fields['PRV_FACT']."|";
                     if($rv->fields['ICOD2'] != ''){
                         $tela .= $rv->fields['ICOD2']."_".$rv->fields['IDESCR2']."@".$rv->fields['PRV_FACT2'];
                     }
-                    
+                    // $tbl.="<td>";
+                    // $tbl.="";
                     if($rv->fields['ICOD2']){
-                    $tbl .= "<td class='cont_comp'><label><input id=".$rv->fields['ID_COMBINACION']." class='i_responsive' type='number'>. % .</label><select id=".$rv->fields['ID_COMBINACION']." class='s_responsive' name='0' id='0'>Composición";
-                    $tbl.="<option value='POLIESTER'>POLIESTER</option>";
-                    $tbl.="<option value='VISCOSA'>VISCOSA</option>";
-                    $tbl.="</select> <br> ";
-                    // $tbl .= "<label><input id=".$rv->fields['ID_COMBINACION']." class='i_responsive' type='number'>. % .</label><select id=".$rv->fields['ID_VARIANTE']." class='s_responsive' name='0' id='0'>Composición</select>></td>";
-                    $tbl.="<label><input id=".$rv->fields['ID_COMBINACION']." class='i_responsive' type='number'>. % .</label><select id=".$rv->fields['ID_COMBINACION']." class='s_responsive' name='0' id='0'>Composición";
-                    $tbl.="<option value='POLIESTER'>POLIESTER</option>";
-                    $tbl.="<option value='VISCOSA'>VISCOSA</option>";
-                    $tbl.="</select>  <br>";
-                    $tbl .= "<class='cont_comp'><label><input id=".$rv->fields['ID_COMBINACION']." class='i_responsive' type='number'>. % .</label><select id=".$rv->fields['ID_COMBINACION']." class='s_responsive' name='0' id='0'>Composición";
-                    $tbl.="<option value='POLIESTER'>POLIESTER</option>";
-                    $tbl.="<option value='VISCOSA'>VISCOSA</option>";
-                    $tbl.="</select>  <br>";
-                    // $tbl .= "<label><input id=".$rv->fields['ID_COMBINACION']." class='i_responsive' type='number'>. % .</label><select id=".$rv->fields['ID_VARIANTE']." class='s_responsive' name='0' id='0'>Composición</select>></td>";
-                    $tbl.="<label><input id=".$rv->fields['ID_COMBINACION']." class='i_responsive' type='number'>. % .</label><select id=".$rv->fields['ID_COMBINACION']." class='s_responsive' name='0' id='0'>Composición";
-                    $tbl.="<option value='POLIESTER'>POLIESTER</option>";
-                    $tbl.="<option value='VISCOSA'>VISCOSA</option>";
-                    $tbl.="</select> ";
+                        $tbl.="<td>";
+                        $tbl.="<a href='#' id='btn_modal_lab".$rv->fields['ID_VARIANTE']."' onclick='Modal_Lab(".$comb.",".$vari.")'><i class='fa-duotone fa-file-circle-plus'></i></a><br><br>";
+                        $tbl.="<a href='#' id='btn_modal_lab".$rv->fields['ID_VARIANTE']."' onclick='Modal_Lab(".$comb.",".$vari.")'><i class='fa-duotone fa-file-circle-plus'></i></a><br>";
+                        $tbl.="</td>";
+                    // $tbl .= "<td class='cont_comp'><label><input id=".$rv->fields['ID_COMBINACION']." class='i_responsive' type='number'>. % .</label><select id=".$rv->fields['ID_COMBINACION']." class='s_responsive' name='0' id='0'>Composición";
+                    // $tbl.="<option value='0'></option>";
+                    // $tbl.="<option value='POLIESTER'>POLIESTER</option>";
+                    // $tbl.="<option value='VISCOSA'>VISCOSA</option>";
+                    // $tbl.="<option value='ELASTANO'>ELASTANO</option>";
+                    // $tbl.="<option value='ELASTICO'>ELASTICO</option>";
+                    // $tbl.="<option value='ELASTODIENO'>ELASTODIENO</option>";
+                    // $tbl.="</select> ";
+                    // // $tbl .= "<label><input id=".$rv->fields['ID_COMBINACION']." class='i_responsive' type='number'>. % .</label><select id=".$rv->fields['ID_VARIANTE']." class='s_responsive' name='0' id='0'>Composición</select>></td>";
+                    // $tbl.="<label><input id=".$rv->fields['ID_COMBINACION']." class='i_responsive' type='number'>. % .</label><select id=".$rv->fields['ID_COMBINACION']." class='s_responsive' name='0' id='0'>Composición";
+                    // $tbl.="<option value='0'></option>";
+                    // $tbl.="<option value='POLIESTER'>POLIESTER</option>";
+                    // $tbl.="<option value='VISCOSA'>VISCOSA</option>";
+                    // $tbl.="<option value='ELASTANO'>ELASTANO</option>";
+                    // $tbl.="<option value='ELASTICO'>ELASTICO</option>";
+                    // $tbl.="<option value='ELASTODIENO'>ELASTODIENO</option>";
+                    // $tbl.="</select>  ";
+                    // $tbl .= "<class='cont_comp'><label><input id=".$rv->fields['ID_COMBINACION']." class='i_responsive' type='number'>. % .</label><select id=".$rv->fields['ID_COMBINACION']." class='s_responsive' name='0' id='0'>Composición";
+                    // $tbl.="<option value='0'></option>";
+                    // $tbl.="<option value='POLIESTER'>POLIESTER</option>";
+                    // $tbl.="<option value='VISCOSA'>VISCOSA</option>";
+                    // $tbl.="<option value='ELASTANO'>ELASTANO</option>";
+                    // $tbl.="<option value='ELASTICO'>ELASTICO</option>";
+                    // $tbl.="<option value='ELASTODIENO'>ELASTODIENO</option>";
+                    // $tbl.="</select>  ";
+                    // // $tbl .= "<label><input id=".$rv->fields['ID_COMBINACION']." class='i_responsive' type='number'>. % .</label><select id=".$rv->fields['ID_VARIANTE']." class='s_responsive' name='0' id='0'>Composición</select>></td>";
+                    // $tbl.="<label><input id=".$rv->fields['ID_COMBINACION']." class='i_responsive' type='number'>. % .</label><select id=".$rv->fields['ID_COMBINACION']." class='s_responsive' name='0' id='0'>Composición";
+                    // $tbl.="<option value='0'></option>";
+                    // $tbl.="<option value='POLIESTER'>POLIESTER</option>";
+                    // $tbl.="<option value='VISCOSA'>VISCOSA</option>";
+                    // $tbl.="<option value='ELASTANO'>ELASTANO</option>";
+                    // $tbl.="<option value='ELASTICO'>ELASTICO</option>";
+                    // $tbl.="<option value='ELASTODIENO'>ELASTODIENO</option>";
+                    // $tbl.="</select> ";
                     }else{
-                        $tbl .= "<td class='cont_comp'><label><input id=".$rv->fields['ID_COMBINACION']." class='i_responsive' type='number'>. % .</label><select id=".$rv->fields['ID_COMBINACION']." class='s_responsive' name='0' id='0'>Composición";
-                    $tbl.="<option value='POLIESTER'>POLIESTER</option>";
-                    $tbl.="<option value='VISCOSA'>VISCOSA</option>";
-                    $tbl.="</select>  <br>";
-                    // $tbl .= "<label><input id=".$rv->fields['ID_COMBINACION']." class='i_responsive' type='number'>. % .</label><select id=".$rv->fields['ID_VARIANTE']." class='s_responsive' name='0' id='0'>Composición</select>></td>";
-                    $tbl.="<label><input id=".$rv->fields['ID_COMBINACION']." class='i_responsive' type='number'>. % .</label><select id=".$rv->fields['ID_COMBINACION']." class='s_responsive' name='0' id='0'>Composición";
-                    $tbl.="<option value='POLIESTER'>POLIESTER</option>";
-                    $tbl.="<option value='VISCOSA'>VISCOSA</option>";
-                    $tbl.="</select> ";
+                        $tbl.="<td>";
+                        $tbl.="<button type='button' id='btn_modal_var".$rv->fields['ID_VARIANTE']."' onclick='Modal_Lab(".$comb.",".$vari.")'' class='btn btn-primary btn-xs'>Agregar</button> <i class='fa fa-plus'></i><br>";
+                        $tbl.="</td>";
+                    //     $tbl .= "<td class='cont_comp'><label><input id=".$rv->fields['ID_COMBINACION']." class='i_responsive' type='number'>. % .</label><select id=".$rv->fields['ID_COMBINACION']." class='s_responsive' name='0' id='0'>Composición";
+                    // $tbl.="<option value=''></option>";
+                    // $tbl.="<option value='POLIESTER'>POLIESTER</option>";
+                    // $tbl.="<option value='VISCOSA'>VISCOSA</option>";
+                    // $tbl.="<option value='ELASTANO'>ELASTANO</option>";
+                    // $tbl.="<option value='ELASTICO'>ELASTICO</option>";
+                    // $tbl.="<option value='ELASTODIENO'>ELASTODIENO</option>";
+                    // $tbl.="</select>  ";
+                    // // $tbl .= "<label><input id=".$rv->fields['ID_COMBINACION']." class='i_responsive' type='number'>. % .</label><select id=".$rv->fields['ID_VARIANTE']." class='s_responsive' name='0' id='0'>Composición</select>></td>";
+                    // $tbl.="<label><input id=".$rv->fields['ID_COMBINACION']." class='i_responsive' type='number'>. % .</label><select id=".$rv->fields['ID_COMBINACION']." class='s_responsive' name='0' id='0'>Composición";
+                    // $tbl.="<option value='POLIESTER'>POLIESTER</option>";
+                    // $tbl.="<option value='VISCOSA'>VISCOSA</option>";
+                    // $tbl.="<option value='ELASTANO'>ELASTANO</option>";
+                    // $tbl.="<option value='ELASTICO'>ELASTICO</option>";
+                    // $tbl.="<option value='ELASTODIENO'>ELASTODIENO</option>";
+                    // $tbl.="</select> ";
                     }
+                    // $tbl.="</td>";
                     $tbl.="</td>";
-
                     $rv->MoveNext();
                 }
                 

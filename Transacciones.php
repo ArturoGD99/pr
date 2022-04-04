@@ -670,5 +670,39 @@ if($acc == 'Registrar_Modelo' || $acc == 'Modificar_Modelo') {
             }
         }
     }
+}else if($acc == 'Agregar_lab'){
+    $idficha = $_POST['ficha'];//id de la ficha
+    $idcombinacion=$_POST['comb'];
+    $idvariante=$_POST['id_variante'];
+    $composicion=$_POST['composicion'];
+    // if($comb == '')
+    //     $rs = $query->Registrar_Combinacion($ficha, $tipo, '', '');
+
+    $composicion2 = explode('|', $composicion);
+    // $icod = explode('_', $tela1[0]);//Separamos icod y descripcion
+    // if($tela2 != ''){
+    //     $tela2 = explode('|', $tela2);
+    //     $icod2 = explode('_', $tela2[0]);//Separamos icod y descripcion
+    // }
+    // if($icod[0]!=''){
+    //     $rc = $query->Consultar_Proscai("ICOD, ICOMPOS","FINV","ICOD = '".$icod[0]."'","");
+    //     $compos = $rc->fields['ICOMPOS'];
+    // }else
+    //     $compos = '';
+
+    $rt = $query->Registrar_Lab($idficha,$idcombinacion,$idvariante,$composicion2[0],$composicion2[1],$composicion2[2],$composicion2[3]);
+    if($rt>0){
+        $r2 = $query->Consultar("*","FHABILITACION FH INNER JOIN FHABIL_VARIANTE FV ON FV.ID_HABIL = FH.ID_HABILITACION","FH.ID_FICHA = ".$ficha." AND FV.VARIANTE =  '".$var."' GROUP BY VARIANTE","");
+        if(!$r2->RecordCount()>0){
+            $rh = $query->Consultar("*","FHABILITACION","ID_FICHA =".$ficha,"");//validamos si ya tiene registradas habilitaciones
+            if($rh->RecordCount()>0){
+                while(!$rh->EOF){
+                    $rv = $query->Registrar_HabilVariante($rh->fields['ID_HABILITACION'], $var, $rh->fields['ICOD']);
+                    $rh->MoveNext();
+                }
+            }
+        }
+        echo 1;
+    }else echo "Error";
 }
 ?>

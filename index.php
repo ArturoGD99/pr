@@ -8,7 +8,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="dist/img/icon.png">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <!-- <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css"> -->
+  <script src="https://kit.fontawesome.com/223eb1ac33.js" crossorigin="anonymous"></script>
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Tempusdominus Bbootstrap 4
@@ -30,6 +31,7 @@
   <!-- Daterange picker -->
   <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
   <!-- summernote
+  
   <link rel="stylesheet" href="plugins/summernote/summernote-bs4.css">-->
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">

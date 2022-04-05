@@ -450,8 +450,8 @@ if($tp == 'cte'){
                     // $tbl.="";
                     if($rv->fields['ICOD2']){
                         $tbl.="<td>";
-                        $tbl.="<a href='#' id='btn_modal_lab".$rv->fields['ID_VARIANTE']."' onclick='Modal_Lab(".$comb.",".$vari.")'><i class='fa-duotone fa-file-circle-plus'></i></a><br><br>";
-                        $tbl.="<a href='#' id='btn_modal_lab".$rv->fields['ID_VARIANTE']."' onclick='Modal_Lab(".$comb.",".$vari.")'><i class='fa-duotone fa-file-circle-plus'></i></a><br>";
+                        $tbl.="<a href='#' id='btn_modal_lab".$rv->fields['ID_VARIANTE']."' onclick='Modal_Lab(".$comb.",".$vari.")'><i class='fas fa-file-signature fa-x5'</i></a><br><br>";
+                        $tbl.="<a href='#' id='btn_modal_lab".$rv->fields['ID_VARIANTE']."' onclick='Modal_Lab(".$comb.",".$vari.")'><i class='fas fa-file-signature fa-x5'></i></a><br>";
                         $tbl.="</td>";
                     // $tbl .= "<td class='cont_comp'><label><input id=".$rv->fields['ID_COMBINACION']." class='i_responsive' type='number'>. % .</label><select id=".$rv->fields['ID_COMBINACION']." class='s_responsive' name='0' id='0'>Composición";
                     // $tbl.="<option value='0'></option>";

@@ -9,6 +9,7 @@
   <link rel="icon" href="dist/img/icon.png">
   <!-- Font Awesome -->
   <!-- <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css"> -->
+  <link href="/plugins/fontawesome-free/css/all.css" rel="stylesheet">
   <script src="https://kit.fontawesome.com/223eb1ac33.js" crossorigin="anonymous"></script>
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
